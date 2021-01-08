@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="backMainView">#1F1F1F</color>
+    <color name="backItemView">#282828</color>
+    <color name="black">#FF000000</color>
+    <color name="colorMainText">#D6D6D6</color>
+    <color name="colorSecondText">#727272</color>
+    <color name="colorAccentText">#3463F2</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
