@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class Adapter(private val list: ArrayList<ModelWeather>): RecyclerView.Adapter<Adapter.ViewHolder>() {
+class AdapterWeather(private val list: MutableList<ModelDay>): RecyclerView.Adapter<AdapterWeather.ViewHolder>() {
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     }

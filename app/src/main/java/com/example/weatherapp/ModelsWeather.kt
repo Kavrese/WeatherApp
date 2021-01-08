@@ -10,7 +10,7 @@ class ModelDay (
     var wind_speed: Float? = null,
     var temp: Temps? = null,
     var feels_like: FeelsLikeTemps? = null,
-    var weather: Weather? = null
+    var weather: List<Weather>? = null
 )
 
 class Weather(
