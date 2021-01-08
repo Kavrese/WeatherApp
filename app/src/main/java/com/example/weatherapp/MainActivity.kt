@@ -13,6 +13,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var list: MutableList<ModelDay> = mutableListOf()
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                             LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                         adapter = AdapterWeather(list)
                     }
+                    initDateForView(response.body()!!)
                 }
 
                 override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
@@ -47,5 +50,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun initDateForView(model: ModelWeather){
         textCity.text = model.timezone!!.substringAfter('/')
+        date.text = SimpleDateFormat("dd.MM.yyyy").format((Date((list[0].dt!!.toLong() * 1000))))
     }
 }
