@@ -15,7 +15,7 @@ class ModelDay (
 
 class Weather(
     var main: String? = null,
-    var descriprtion: String? = null,
+    var description: String? = null,
     var clouds: Int? = null
 )
 

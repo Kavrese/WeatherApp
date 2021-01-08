@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_card.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,13 +20,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             retrofit.create(OpenWeatherMapInterface::class.java)
-                .getDaileData("33.441792", "-94.037689").enqueue(object : Callback<ModelWeather> {
+                .getDaileData("55.4507", "37.3656").enqueue(object : Callback<ModelWeather> {
                 override fun onResponse(
                     call: Call<ModelWeather>,
                     response: Response<ModelWeather>
@@ -35,15 +36,16 @@ class MainActivity : AppCompatActivity() {
                             LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                         adapter = AdapterWeather(list)
                     }
-
-
                 }
 
                 override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
                     Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG)
                         .show()
                 }
-
             })
         }
+
+    private fun initDateForView(model: ModelWeather){
+        textCity.text = model.timezone!!.substringAfter('/')
+    }
 }
