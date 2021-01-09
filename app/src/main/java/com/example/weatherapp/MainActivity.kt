@@ -2,6 +2,8 @@ package com.example.weatherapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,18 +12,22 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item.*
 import kotlinx.android.synthetic.main.lin_coord.*
+import kotlinx.android.synthetic.main.lin_history.*
 import kotlinx.android.synthetic.main.main_card.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.security.KeyException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
     private var list: MutableList<ModelDay> = mutableListOf()
+    private var listCity: MutableList<ModelCity> = mutableListOf()
     private var openCoord = false
+    private var openHistory = false
     private var lat = "55.4507"
     private var lon = "37.3656"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +35,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
         setContentView(R.layout.activity_main)
 
         menu.setOnClickListener {
+            motion.setTransition(R.id.tra_show)
             if (!openCoord)
                 motion.transitionToEnd()
             else
@@ -37,25 +44,54 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
             openCoord =! openCoord
         }
 
-        inc_create.findViewById<LinearLayout>(R.id.lin_button).setOnClickListener {
-            if (textLat.text.toString() != lat && textLon.text.toString() != lon) {
-                lat = if (textLat.text.isNotEmpty())
-                    textLat.text.toString()
-                else
-                    "55.4507"
-
-                lon = if (textLon.text.isNotEmpty())
-                    textLon.text.toString()
-                else
-                    "37.3656"
-
-                initDataFromApi()
-            }
-            motion.transitionToStart()
-            openCoord = false
+        rec_history.apply {
+            adapter = AdapterHistory(listCity)
+            layoutManager = LinearLayoutManager(this@MainActivity)
         }
+
+        inc_create.findViewById<LinearLayout>(R.id.lin_button).setOnClickListener {
+            initNewCity()
+        }
+
+        history.setOnClickListener {
+            motion.setTransition(R.id.tra_show_history)
+            if (!openHistory){
+                motion.transitionToEnd()
+            }else{
+                motion.transitionToStart()
+            }
+            openHistory = !openHistory
+        }
+
+        textLon.setOnEditorActionListener { textView, i, keyEvent ->
+            if (i == EditorInfo.IME_ACTION_GO){
+                initNewCity()
+                true
+            }else{
+                false
+            }
+        }
+
         initDataFromApi()
         }
+
+    private fun initNewCity(){
+        if (textLat.text.toString() != lat && textLon.text.toString() != lon) {
+            lat = if (textLat.text.isNotEmpty())
+                textLat.text.toString()
+            else
+                "55.4507"
+
+            lon = if (textLon.text.isNotEmpty())
+                textLon.text.toString()
+            else
+                "37.3656"
+
+            initDataFromApi()
+        }
+        motion.transitionToStart()
+        openCoord = false
+    }
 
     private fun initDateForMainCard(model: ModelDay, pos:Int){
         var te = model.temp!!.day!!.toInt().toString() + "°"
@@ -73,6 +109,9 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
         Clouds.text = model.clouds!!.toString() + '%'
         Humidity.text = model.humidity!!.toString() + '%'
         Wind.text = model.wind_speed.toString() + "\nm/s"
+
+        listCity.add(ModelCity(textCity.text.toString(), lat, lon))
+        rec_history.adapter!!.notifyDataSetChanged()
     }
 
     override fun clickToItem(position: Int) {

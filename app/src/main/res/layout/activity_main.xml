@@ -21,6 +21,7 @@
         tools:context=".MainActivity">
 
         <LinearLayout
+            android:gravity="top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"
@@ -58,9 +59,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_height="40dp"
                 android:layout_weight="20"
                 app:cardBackgroundColor="@color/colorAlpha"
                 app:cardCornerRadius="20dp"
@@ -117,4 +116,13 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/lin_history"
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="210dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.motion.widget.MotionLayout>
