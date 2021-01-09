@@ -2,6 +2,6 @@ package com.example.weatherapp
 
 import java.text.FieldPosition
 
-interface ClickFromOtherActivity {
+interface ClickFromOtherOBJ {
     fun clickToItem(position: Int){}
 }

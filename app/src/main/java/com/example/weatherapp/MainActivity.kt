@@ -1,9 +1,10 @@
 package com.example.weatherapp
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +20,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.security.KeyException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
+class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     private var list: MutableList<ModelDay> = mutableListOf()
     private var listCity: MutableList<ModelCity> = mutableListOf()
     private var openCoord = false
@@ -35,13 +35,10 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
         setContentView(R.layout.activity_main)
 
         menu.setOnClickListener {
-            motion.setTransition(R.id.tra_show)
             if (!openCoord)
-                motion.transitionToEnd()
+                showCoord()
             else
-                motion.transitionToStart()
-
-            openCoord =! openCoord
+                hideCoord()
         }
 
         rec_history.apply {
@@ -54,13 +51,11 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
         }
 
         history.setOnClickListener {
-            motion.setTransition(R.id.tra_show_history)
-            if (!openHistory){
-                motion.transitionToEnd()
-            }else{
-                motion.transitionToStart()
-            }
-            openHistory = !openHistory
+            if (!openHistory)
+                showHistory()
+            else
+                hideHistory()
+
         }
 
         textLon.setOnEditorActionListener { textView, i, keyEvent ->
@@ -76,6 +71,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
         }
 
     private fun initNewCity(){
+        hideKeyboard()
         if (textLat.text.toString() != lat && textLon.text.toString() != lon) {
             lat = if (textLat.text.isNotEmpty())
                 textLat.text.toString()
@@ -89,8 +85,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
 
             initDataFromApi()
         }
-        motion.transitionToStart()
-        openCoord = false
+        hideCoord()
     }
 
     private fun initDateForMainCard(model: ModelDay, pos:Int){
@@ -146,5 +141,35 @@ class MainActivity : AppCompatActivity(), ClickFromOtherActivity {
                         .show()
                 }
             })
+    }
+
+    private fun hideCoord(){
+        motion.setTransition(R.id.tra_show)
+        motion.transitionToStart()
+        openCoord = false
+    }
+
+    private fun showCoord(){
+        motion.setTransition(R.id.tra_show)
+        motion.transitionToEnd()
+        openCoord = true
+    }
+
+    private fun hideHistory(){
+        motion.setTransition(R.id.tra_show_history)
+        motion.transitionToStart()
+        openHistory = false
+    }
+
+    private fun showHistory(){
+        motion.setTransition(R.id.tra_show_history)
+        motion.transitionToEnd()
+        openHistory = true
+    }
+
+    private fun hideKeyboard() {
+        val imm: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
     }
 }
