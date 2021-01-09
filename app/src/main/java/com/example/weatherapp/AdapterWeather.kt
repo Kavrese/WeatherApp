@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -21,6 +23,7 @@ class AdapterWeather(private val list: MutableList<ModelDay>): RecyclerView.Adap
         val textT = itemView.findViewById<TextView>(R.id.textT)
         val textDate = itemView.findViewById<TextView>(R.id.textDate)
         val img = itemView.findViewById<ImageView>(R.id.imgSmall)
+        val back = itemView.findViewById<LinearLayout>(R.id.lin_item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,6 +32,9 @@ class AdapterWeather(private val list: MutableList<ModelDay>): RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        if(position == 0){
+            holder.back.background = holder.itemView.context.resources.getDrawable(R.drawable.shape_gr)
+        }
         Picasso.get()
                 .load("http://openweathermap.org/img/wn/${list[position].weather?.get(0)!!.icon!!}@4x.png")
                 .into(holder.img)
