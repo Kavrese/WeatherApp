@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="title_activity_maps">Map</string>
+    <integer name="swing_anim_time">750</integer>
 </resources>

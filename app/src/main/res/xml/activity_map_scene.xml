@@ -8,14 +8,6 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"
             app:layout_constraintBottom_toBottomOf="parent" />
-        <Constraint
-            android:id="@+id/include"
-            android:layout_width="200dp"
-            android:layout_height="300dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="210dp"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_editor_absoluteX="312dp" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -25,46 +17,21 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent" />
         <Constraint
+            android:id="@+id/include"
+            android:layout_width="300dp"
             android:layout_height="300dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="200dp"
-            android:id="@+id/include"
-            app:layout_editor_absoluteX="211dp"
-            android:layout_marginBottom="210dp" />
-        <Constraint
-            android:layout_width="200dp"
-            android:layout_height="300dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/include"
             android:layout_marginBottom="210dp"
-            app:layout_editor_absoluteX="211dp" />
+            app:layout_constraintEnd_toEndOf="parent" />
     </ConstraintSet>
 
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
         android:id="@+id/tra_show"
-        app:pathMotionArc="none"
         app:duration="100">
-        <KeyFrameSet ></KeyFrameSet>
+        <OnSwipe
+            app:touchAnchorId="@id/inc"
+            app:dragDirection="dragUp" />
     </Transition>
-    <ConstraintSet android:id="@+id/end2" >
-        <Constraint
-            android:id="@+id/include"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="210dp" />
-        <Constraint
-            android:id="@+id/inc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent" />
-    </ConstraintSet>
-    <Transition
-        app:constraintSetStart="@+id/end"
-        app:constraintSetEnd="@+id/end2"
-        app:duration="100"
-        android:id="@+id/tra_show_history" />
 </MotionScene>

@@ -7,8 +7,10 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/main_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
         app:cardBackgroundColor="@color/colorAlpha"
         app:cardCornerRadius="25dp"
         app:cardElevation="0dp">
@@ -167,6 +169,27 @@
             </LinearLayout>
 
         </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/info_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/colorAlpha"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/shape_gr_info"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:rotation="0"
+            android:weightSum="100" />
 
     </androidx.cardview.widget.CardView>
 

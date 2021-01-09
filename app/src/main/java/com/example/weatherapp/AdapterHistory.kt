@@ -15,7 +15,7 @@ class AdapterHistory(private var list: MutableList<ModelCity>): RecyclerView.Ada
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_histoy, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_history, parent, false)
         return ViewHolder(view)
     }
 

@@ -3,6 +3,9 @@ package com.example.weatherapp
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -26,8 +29,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     private var list: MutableList<ModelDay> = mutableListOf()
     private var listCity: MutableList<ModelCity> = mutableListOf()
-    private var openCoord = false
-    private var openHistory = false
+    private var openWindow = false
     private var lat = "55.4507"
     private var lon = "37.3656"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         setContentView(R.layout.activity_main)
 
         menu.setOnClickListener {
-            if (!openCoord)
+            if (!openWindow)
                 showCoord()
             else
                 hideCoord()
@@ -50,14 +52,6 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             initNewCity()
         }
 
-        history.setOnClickListener {
-            if (!openHistory)
-                showHistory()
-            else
-                hideHistory()
-
-        }
-
         textLon.setOnEditorActionListener { textView, i, keyEvent ->
             if (i == EditorInfo.IME_ACTION_GO){
                 initNewCity()
@@ -65,6 +59,13 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             }else{
                 false
             }
+        }
+
+        main_card.setOnLongClickListener {
+            val animation: Animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_left)
+            info_card.startAnimation(animation)
+            info_card.visibility = View.VISIBLE
+            true
         }
 
         initDataFromApi()
@@ -86,6 +87,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         }
         hideCoord()
     }
+
 
     private fun initDateForMainCard(model: ModelDay, pos:Int){
         var te = model.temp!!.day!!.toInt().toString() + "°"
@@ -115,10 +117,12 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
 
     override fun clickToItemHistory(position: Int) {
         val modelCity = listCity[position]
-        lat = modelCity.lat!!
-        lon = modelCity.lon!!
-        initDataFromApi()
-        hideCoord()
+        if (lat != modelCity.lat!! && lon != modelCity.lon!!) {
+            lat = modelCity.lat!!
+            lon = modelCity.lon!!
+            initDataFromApi()
+        }else
+            hideCoord()
     }
 
     private fun initDataFromApi(){
@@ -132,6 +136,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                     call: Call<ModelWeather>,
                     response: Response<ModelWeather>
                 ) {
+                    hideCoord()
                     list = response.body()!!.daily!!.toMutableList()
                     rec.apply {
                         layoutManager =
@@ -151,28 +156,17 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     }
 
     private fun hideCoord(){
+        motion.requestFocus()
         hideKeyboard()
         motion.setTransition(R.id.tra_show)
         motion.transitionToStart()
-        openCoord = false
+        openWindow = false
     }
 
     private fun showCoord(){
         motion.setTransition(R.id.tra_show)
         motion.transitionToEnd()
-        openCoord = true
-    }
-
-    private fun hideHistory(){
-        motion.setTransition(R.id.tra_show_history)
-        motion.transitionToStart()
-        openHistory = false
-    }
-
-    private fun showHistory(){
-        motion.setTransition(R.id.tra_show_history)
-        motion.transitionToEnd()
-        openHistory = true
+        openWindow = true
     }
 
     private fun hideKeyboard() {
