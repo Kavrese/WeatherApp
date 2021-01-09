@@ -56,7 +56,10 @@ class MainActivity : AppCompatActivity(), ClickFromRecycler {
             te = "+$te"
         t.text = te
         textWeather.text = model.weather!![0].description!!.capitalize()
-        date.text = SimpleDateFormat("dd.MM.yyyy").format((Date((list[0].dt!!.toLong() * 1000))))
+        val dateT = Date((list[0].dt!!.toLong() * 1000))
+        val cal = Calendar.getInstance()
+        cal.time = dateT
+        date.text = SimpleDateFormat("dd.MM.yyyy").format((dateT)) + ", ${cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG_FORMAT, Locale.ENGLISH)}"
         Picasso.get()
             .load("http://openweathermap.org/img/wn/${model.weather!![0].icon}@4x.png")
             .into(img)
