@@ -60,5 +60,8 @@ class MainActivity : AppCompatActivity() {
         Picasso.get()
             .load("http://openweathermap.org/img/wn/${model.daily!![nowPos].weather!![0].icon}@4x.png")
             .into(img)
+        Clouds.text = list[nowPos].clouds!!.toString() + '%'
+        Humidity.text = list[nowPos].humidity!!.toString() + '%'
+        Wind.text = list[nowPos].wind_speed.toString() + "\nm/s"
     }
 }
