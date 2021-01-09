@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    android:id="@+id/motion"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    app:layoutDescription="@xml/activity_map_scene">
+
+<ScrollView
+    android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backMainView">
@@ -103,3 +111,10 @@
 
     </LinearLayout>
 </ScrollView>
+    <include
+        android:id="@+id/inc"
+        layout="@layout/lin_coord"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.motion.widget.MotionLayout>
