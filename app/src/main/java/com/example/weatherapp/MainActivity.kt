@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ClickFromRecycler {
     private var list: MutableList<ModelDay> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
                             LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                         adapter = AdapterWeather(list, 0)
                     }
-                    initDateForView(response.body()!!, 0)
+                    textCity.text = response.body()!!.timezone!!.substringAfter('/')
+                    initDateForMainCard(response.body()!!.daily!![0])
                 }
 
                 override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
@@ -49,19 +50,23 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-    private fun initDateForView(model: ModelWeather, nowPos: Int){
-        var te = model.daily!![nowPos].temp!!.day!!.toInt().toString() + "°"
+    private fun initDateForMainCard(model: ModelDay){
+        var te = model.temp!!.day!!.toInt().toString() + "°"
         if ("-" !in te)
             te = "+$te"
         t.text = te
-        textWeather.text = model.daily!![nowPos].weather!![0].description!!.capitalize()
-        textCity.text = model.timezone!!.substringAfter('/')
+        textWeather.text = model.weather!![0].description!!.capitalize()
         date.text = SimpleDateFormat("dd.MM.yyyy").format((Date((list[0].dt!!.toLong() * 1000))))
         Picasso.get()
-            .load("http://openweathermap.org/img/wn/${model.daily!![nowPos].weather!![0].icon}@4x.png")
+            .load("http://openweathermap.org/img/wn/${model.weather!![0].icon}@4x.png")
             .into(img)
-        Clouds.text = list[nowPos].clouds!!.toString() + '%'
-        Humidity.text = list[nowPos].humidity!!.toString() + '%'
-        Wind.text = list[nowPos].wind_speed.toString() + "\nm/s"
+        Clouds.text = model.clouds!!.toString() + '%'
+        Humidity.text = model.humidity!!.toString() + '%'
+        Wind.text = model.wind_speed.toString() + "\nm/s"
+    }
+
+    override fun clickToItem(position: Int) {
+        val model = list[position]
+        initDateForMainCard(model)
     }
 }

@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AdapterWeather(private val list: MutableList<ModelDay>, val nowPos: Int): RecyclerView.Adapter<AdapterWeather.ViewHolder>() {
+class AdapterWeather(private val list: MutableList<ModelDay>, var nowPos: Int): RecyclerView.Adapter<AdapterWeather.ViewHolder>() {
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val textT = itemView.findViewById<TextView>(R.id.textT)
         val textDate = itemView.findViewById<TextView>(R.id.textDate)
@@ -47,6 +47,14 @@ class AdapterWeather(private val list: MutableList<ModelDay>, val nowPos: Int): 
         holder.textT.text = t
 
         holder.textDate.text = SimpleDateFormat("dd.MM.yyyy").format((Date((list[position].dt!!.toLong() * 1000))))
+
+        holder.itemView.setOnClickListener {
+            val activity = holder.itemView.context as MainActivity
+            activity.clickToItem(position)
+            nowPos = position
+            holder.back.background = holder.itemView.context.resources.getDrawable(R.drawable.shape_gr)
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount(): Int = list.size
