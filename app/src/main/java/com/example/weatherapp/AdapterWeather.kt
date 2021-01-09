@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,6 +25,7 @@ class AdapterWeather(private val list: MutableList<ModelDay>, var nowPos: Int): 
         val textDate = itemView.findViewById<TextView>(R.id.textDate)
         val img = itemView.findViewById<ImageView>(R.id.imgSmall)
         val back = itemView.findViewById<LinearLayout>(R.id.lin_item)
+        val textDayWeek = itemView.findViewById<TextView>(R.id.textDayWeek)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,6 +47,11 @@ class AdapterWeather(private val list: MutableList<ModelDay>, var nowPos: Int): 
         if ("-" !in t)
             t = "+$t"
         holder.textT.text = t
+
+        val dateT = Date((list[position].dt!!.toLong() * 1000))
+        val cal = Calendar.getInstance()
+        cal.time = dateT
+        holder.textDayWeek.text = cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG_FORMAT, Locale.ENGLISH)
 
         holder.textDate.text = SimpleDateFormat("dd.MM.yyyy").format((Date((list[position].dt!!.toLong() * 1000))))
 

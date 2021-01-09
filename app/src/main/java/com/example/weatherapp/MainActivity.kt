@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), ClickFromRecycler {
                         adapter = AdapterWeather(list, 0)
                     }
                     textCity.text = response.body()!!.timezone!!.substringAfter('/')
-                    initDateForMainCard(response.body()!!.daily!![0])
+                    initDateForMainCard(response.body()!!.daily!![0], 0)
                 }
 
                 override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
@@ -50,13 +50,13 @@ class MainActivity : AppCompatActivity(), ClickFromRecycler {
             })
         }
 
-    private fun initDateForMainCard(model: ModelDay){
+    private fun initDateForMainCard(model: ModelDay, pos:Int){
         var te = model.temp!!.day!!.toInt().toString() + "°"
         if ("-" !in te)
             te = "+$te"
         t.text = te
         textWeather.text = model.weather!![0].description!!.capitalize()
-        val dateT = Date((list[0].dt!!.toLong() * 1000))
+        val dateT = Date((list[pos].dt!!.toLong() * 1000))
         val cal = Calendar.getInstance()
         cal.time = dateT
         date.text = SimpleDateFormat("dd.MM.yyyy").format((dateT)) + ", ${cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG_FORMAT, Locale.ENGLISH)}"
@@ -70,6 +70,6 @@ class MainActivity : AppCompatActivity(), ClickFromRecycler {
 
     override fun clickToItem(position: Int) {
         val model = list[position]
-        initDateForMainCard(model)
+        initDateForMainCard(model, position)
     }
 }
