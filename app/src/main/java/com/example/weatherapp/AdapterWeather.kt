@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AdapterWeather(private val list: MutableList<ModelDay>): RecyclerView.Adapter<AdapterWeather.ViewHolder>() {
+class AdapterWeather(private val list: MutableList<ModelDay>, val nowPos: Int): RecyclerView.Adapter<AdapterWeather.ViewHolder>() {
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val textT = itemView.findViewById<TextView>(R.id.textT)
         val textDate = itemView.findViewById<TextView>(R.id.textDate)
@@ -32,8 +32,10 @@ class AdapterWeather(private val list: MutableList<ModelDay>): RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(position == 0){
+        if(position == nowPos){
             holder.back.background = holder.itemView.context.resources.getDrawable(R.drawable.shape_gr)
+        }else{
+            holder.back.setBackgroundColor(holder.itemView.context.resources.getColor(R.color.backItemView))
         }
         Picasso.get()
                 .load("http://openweathermap.org/img/wn/${list[position].weather?.get(0)!!.icon!!}@4x.png")

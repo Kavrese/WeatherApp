@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                     rec.apply {
                         layoutManager =
                             LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
-                        adapter = AdapterWeather(list)
+                        adapter = AdapterWeather(list, 0)
                     }
                     initDateForView(response.body()!!, 0)
                 }
