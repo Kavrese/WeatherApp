@@ -23,6 +23,11 @@ class AdapterHistory(private var list: MutableList<ModelCity>): RecyclerView.Ada
         holder.cityName.text = list[position].nameCity!!
         holder.lat.text = list[position].lat!!
         holder.lon.text = list[position].lon!!
+
+        holder.itemView.setOnClickListener {
+            val activity = holder.itemView.context as MainActivity
+            activity.clickToItemHistory(position)
+        }
     }
 
     override fun getItemCount(): Int = list.size

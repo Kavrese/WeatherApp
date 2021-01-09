@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         }
 
     private fun initNewCity(){
-        hideKeyboard()
         if (textLat.text.toString() != lat && textLon.text.toString() != lon) {
             lat = if (textLat.text.isNotEmpty())
                 textLat.text.toString()
@@ -109,9 +108,17 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         rec_history.adapter!!.notifyDataSetChanged()
     }
 
-    override fun clickToItem(position: Int) {
+    override fun clickToItemWeek(position: Int) {
         val model = list[position]
         initDateForMainCard(model, position)
+    }
+
+    override fun clickToItemHistory(position: Int) {
+        val modelCity = listCity[position]
+        lat = modelCity.lat!!
+        lon = modelCity.lon!!
+        initDataFromApi()
+        hideCoord()
     }
 
     private fun initDataFromApi(){
@@ -144,6 +151,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     }
 
     private fun hideCoord(){
+        hideKeyboard()
         motion.setTransition(R.id.tra_show)
         motion.transitionToStart()
         openCoord = false
