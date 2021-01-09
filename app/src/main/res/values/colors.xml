@@ -6,5 +6,6 @@
     <color name="colorMainText">#D6D6D6</color>
     <color name="colorSecondText">#727272</color>
     <color name="colorAccentText">#3463F2</color>
+    <color name="colorAlpha">#00FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

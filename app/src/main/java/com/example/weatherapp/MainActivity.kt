@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.item.*
 import kotlinx.android.synthetic.main.main_card.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                             LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
                         adapter = AdapterWeather(list)
                     }
-                    initDateForView(response.body()!!)
+                    initDateForView(response.body()!!, 0)
                 }
 
                 override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
@@ -48,8 +49,16 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-    private fun initDateForView(model: ModelWeather){
+    private fun initDateForView(model: ModelWeather, nowPos: Int){
+        var te = model.daily!![nowPos].temp!!.day!!.toInt().toString() + "°"
+        if ("-" !in te)
+            te = "+$te"
+        t.text = te
+        textWeather.text = model.daily!![nowPos].weather!![0].description!!.capitalize()
         textCity.text = model.timezone!!.substringAfter('/')
         date.text = SimpleDateFormat("dd.MM.yyyy").format((Date((list[0].dt!!.toLong() * 1000))))
+        Picasso.get()
+            .load("http://openweathermap.org/img/wn/${model.daily!![nowPos].weather!![0].icon}@4x.png")
+            .into(img)
     }
 }

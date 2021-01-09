@@ -30,7 +30,7 @@ class AdapterWeather(private val list: MutableList<ModelDay>): RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Picasso.get()
-                .load("http://openweathermap.org/img/wn/10d@4x.png")
+                .load("http://openweathermap.org/img/wn/${list[position].weather?.get(0)!!.icon!!}@4x.png")
                 .into(holder.img)
         var t = list[position].temp!!.day!!.toInt().toString()
 

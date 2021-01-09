@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="7dp"
     android:layout_marginRight="7dp"
+    app:cardBackgroundColor="@color/colorAlpha"
     app:cardCornerRadius="30dp"
     app:cardElevation="0dp">
 
@@ -23,7 +24,8 @@
             android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="TextView"
-            android:textColor="@color/colorMainText" />
+            android:textColor="@color/colorMainText"
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/imgSmall"

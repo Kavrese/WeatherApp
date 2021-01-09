@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/rel"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rel"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorAlpha"
         app:cardCornerRadius="25dp"
         app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="300dp"
             android:background="@drawable/shape_gr"
             android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:rotation="0"
             android:weightSum="100">
 
             <TextView
@@ -40,18 +42,130 @@
                 android:gravity="center"
                 android:text="+12°"
                 android:textColor="@color/white"
-                android:textSize="120sp"
+                android:textSize="200sp"
                 android:textStyle="bold"
                 app:autoSizeTextType="uniform" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="35"
+                android:orientation="horizontal"
+                android:weightSum="10">
+
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="90dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
+                    android:padding="5dp"
+                    android:scaleType="center" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3.3"
+                        android:orientation="vertical"
+                        android:weightSum="10">
+
+                        <TextView
+                            android:id="@+id/textClouds"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:gravity="center"
+                            android:text="Clouds"
+                            android:textColor="@color/colorMainText"
+                            android:textSize="14sp"
+                            app:autoSizeTextType="none" />
+
+                        <TextView
+                            android:id="@+id/Clouds"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:gravity="center"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:autoSizeTextType="uniform" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3.3"
+                        android:orientation="vertical"
+                        android:weightSum="10">
+
+                        <TextView
+                            android:id="@+id/textWind"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:gravity="center"
+                            android:text="Wind"
+                            android:textColor="@color/colorMainText"
+                            android:textSize="14sp"
+                            app:autoSizeTextType="none" />
+
+                        <TextView
+                            android:id="@+id/Wind"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:gravity="center"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:autoSizeTextType="uniform" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3.3"
+                        android:orientation="vertical"
+                        android:weightSum="10">
+
+                        <TextView
+                            android:id="@+id/textHumidity"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:gravity="center"
+                            android:text="Humidity"
+                            android:textColor="@color/colorMainText"
+                            android:textSize="14sp"
+                            app:autoSizeTextType="none" />
+
+                        <TextView
+                            android:id="@+id/Humidity"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="5"
+                            android:gravity="center"
+                            android:text="TextView"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:autoSizeTextType="uniform" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
-        app:srcCompat="@drawable/sun" />
 </RelativeLayout>
