@@ -69,14 +69,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/backItemView"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                    <ImageView
-                        android:id="@+id/menu"
+                    <TextView
+                        android:id="@+id/textAQI"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="10dp"
-                        app:srcCompat="@drawable/menu" />
+                        android:drawableLeft="@drawable/eco"
+                        android:gravity="center"
+                        android:text="000"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -131,7 +135,7 @@
         layout="@layout/start_lin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/scroll"
         app:layout_constraintStart_toStartOf="parent"

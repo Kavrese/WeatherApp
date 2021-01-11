@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,11 +31,12 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     private var startScreen = true
     private var lat = "55.4507"
     private var lon = "37.3656"
+    private var cityAQI: ModelAQI? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showStartScreen()
-        menu.setOnClickListener {
+        textCity.setOnClickListener {
             if (!openWindow)
                 showCoord()
             else
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             }
         }
 
-        initDataFromApi()
+        initDataFromApiWeather()
         }
 
     private fun initNewCity(){
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             else
                 "37.3656"
 
-            initDataFromApi()
+            initDataFromApiWeather()
         }
         hideCoord()
     }
@@ -90,9 +92,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         val cal = Calendar.getInstance()
         cal.time = dateT
         date.text = SimpleDateFormat("dd.MM.yyyy").format((dateT)) + ", ${cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG_FORMAT, Locale.ENGLISH)}"
-        Picasso.get()
-            .load("http://openweathermap.org/img/wn/${model.weather!![0].icon}@4x.png")
-            .into(img)
+        initWeatherIcon(model.weather!![0].icon.toString(), img)
         Clouds.text = model.clouds!!.toString() + '%'
         Humidity.text = model.humidity!!.toString() + '%'
         Wind.text = model.wind_speed.toString() + "\nm/s"
@@ -111,12 +111,18 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         if (lat != modelCity.lat!! && lon != modelCity.lon!!) {
             lat = modelCity.lat!!
             lon = modelCity.lon!!
-            initDataFromApi()
+            initDataFromApiWeather()
         }else
             hideCoord()
     }
 
-    private fun initDataFromApi(){
+    private fun initWeatherIcon(icon: String, img: ImageView){
+        Picasso.get()
+                .load("http://openweathermap.org/img/wn/${icon}@4x.png")
+                .into(img)
+    }
+
+    private fun initDataFromApiWeather(){
         showStartScreen()
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/data/2.5/")
@@ -138,6 +144,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                     textCity.text = response.body()!!.timezone!!.substringAfter('/')
                     initDateForMainCard(response.body()!!.daily!![0], 0)
                     rec.adapter!!.notifyDataSetChanged()
+                    initAQI()
                     hideStartScreen()
                 }
 
@@ -146,6 +153,24 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                         .show()
                 }
             })
+    }
+
+    private fun initAQI(){
+        val retrofit = Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://api.waqi.info/feed/")
+                .build()
+        retrofit.create(OpenWeatherMapInterface::class.java).getAQI(lat.toFloat().toInt().toString(), lon.toFloat().toInt().toString()).enqueue(object: Callback<ModelAQI>{
+            override fun onResponse(call: Call<ModelAQI>, response: Response<ModelAQI>) {
+                cityAQI = response.body()!!
+                textAQI.text = cityAQI!!.data!!.aqi!!.toString()
+            }
+
+            override fun onFailure(call: Call<ModelAQI>, t: Throwable) {
+                Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG)
+                        .show()
+            }
+        })
     }
 
     private fun hideCoord(){
