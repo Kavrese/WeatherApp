@@ -3,9 +3,6 @@ package com.example.weatherapp
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -30,12 +27,13 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     private var list: MutableList<ModelDay> = mutableListOf()
     private var listCity: MutableList<ModelCity> = mutableListOf()
     private var openWindow = false
+    private var startScreen = true
     private var lat = "55.4507"
     private var lon = "37.3656"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        showStartScreen()
         menu.setOnClickListener {
             if (!openWindow)
                 showCoord()
@@ -59,13 +57,6 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             }else{
                 false
             }
-        }
-
-        main_card.setOnLongClickListener {
-            val animation: Animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_left)
-            info_card.startAnimation(animation)
-            info_card.visibility = View.VISIBLE
-            true
         }
 
         initDataFromApi()
@@ -126,6 +117,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     }
 
     private fun initDataFromApi(){
+        showStartScreen()
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -146,6 +138,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                     textCity.text = response.body()!!.timezone!!.substringAfter('/')
                     initDateForMainCard(response.body()!!.daily!![0], 0)
                     rec.adapter!!.notifyDataSetChanged()
+                    hideStartScreen()
                 }
 
                 override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
@@ -167,6 +160,18 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         motion.setTransition(R.id.tra_show)
         motion.transitionToEnd()
         openWindow = true
+    }
+
+    private fun showStartScreen(){
+        startScreen = true
+        motion.setTransition(R.id.tra_hide)
+        motion.transitionToEnd()
+    }
+
+    private fun hideStartScreen(){
+        startScreen = false
+        motion.setTransition(R.id.tra_hide)
+        motion.transitionToStart()
     }
 
     private fun hideKeyboard() {

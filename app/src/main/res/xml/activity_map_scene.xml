@@ -8,6 +8,16 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"
             app:layout_constraintBottom_toBottomOf="parent" />
+        <Constraint
+            android:id="@+id/includeClouds"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/scroll" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -23,6 +33,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="210dp"
             app:layout_constraintEnd_toEndOf="parent" />
+        <Constraint
+            android:id="@+id/includeClouds"
+            app:layout_constraintEnd_toEndOf="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </ConstraintSet>
 
     <Transition
@@ -34,4 +53,20 @@
             app:touchAnchorId="@id/inc"
             app:dragDirection="dragUp" />
     </Transition>
+    <ConstraintSet android:id="@+id/hideStart" >
+        <Constraint
+            android:id="@+id/includeClouds"
+            app:layout_constraintEnd_toEndOf="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </ConstraintSet>
+    <Transition
+        app:constraintSetStart="@+id/start"
+        app:constraintSetEnd="@+id/hideStart"
+        android:id="@+id/tra_hide"
+        app:duration="100" />
 </MotionScene>
