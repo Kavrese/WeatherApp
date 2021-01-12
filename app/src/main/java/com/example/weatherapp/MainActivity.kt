@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             initNewCity()
         }
 
-        textLon.setOnEditorActionListener { textView, i, keyEvent ->
+        textLon.setOnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_GO){
                 initNewCity()
                 true
@@ -124,11 +124,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
 
     private fun initDataFromApiWeather(){
         showStartScreen()
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/data/2.5/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        retrofit.create(OpenWeatherMapInterface::class.java)
+        initRetrofit("https://api.openweathermap.org/data/2.5/").create(OpenWeatherMapInterface::class.java)
             .getDaileData(lat, lon).enqueue(object : Callback<ModelWeather> {
                 override fun onResponse(
                     call: Call<ModelWeather>,
@@ -145,7 +141,6 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                     initDateForMainCard(response.body()!!.daily!![0], 0)
                     rec.adapter!!.notifyDataSetChanged()
                     initAQI()
-                    hideStartScreen()
                 }
 
                 override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
@@ -156,14 +151,11 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     }
 
     private fun initAQI(){
-        val retrofit = Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://api.waqi.info/feed/")
-                .build()
-        retrofit.create(OpenWeatherMapInterface::class.java).getAQI(lat.toFloat().toInt().toString(), lon.toFloat().toInt().toString()).enqueue(object: Callback<ModelAQI>{
+        initRetrofit("https://api.waqi.info/feed/geo:$lat;$lon/").create(OpenWeatherMapInterface::class.java).getAQI().enqueue(object: Callback<ModelAQI>{
             override fun onResponse(call: Call<ModelAQI>, response: Response<ModelAQI>) {
                 cityAQI = response.body()!!
                 textAQI.text = cityAQI!!.data!!.aqi!!.toString()
+                hideStartScreen()
             }
 
             override fun onFailure(call: Call<ModelAQI>, t: Throwable) {
@@ -171,6 +163,13 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                         .show()
             }
         })
+    }
+
+    private fun initRetrofit(baseUrl: String): Retrofit{
+        return Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(baseUrl)
+                .build()
     }
 
     private fun hideCoord(){
