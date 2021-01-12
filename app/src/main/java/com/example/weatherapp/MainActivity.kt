@@ -36,11 +36,16 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showStartScreen()
+
+        favoriteCheck.setOnCheckedChangeListener { compoundButton, b ->
+
+        }
+
         textCity.setOnClickListener {
             if (!openWindow)
-                showCoord()
+                showCoordinatesChoose()
             else
-                hideCoord()
+                hideCoordinatesChoose()
         }
 
         rec_history.apply {
@@ -50,11 +55,13 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
 
         inc_create.findViewById<LinearLayout>(R.id.lin_button).setOnClickListener {
             initNewCity()
+            hideCoordinatesChoose()
         }
 
         textLon.setOnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_GO){
                 initNewCity()
+                hideCoordinatesChoose()
                 true
             }else{
                 false
@@ -78,7 +85,6 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
 
             initDataFromApiWeather()
         }
-        hideCoord()
     }
 
 
@@ -91,11 +97,11 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         val dateT = Date((list[pos].dt!!.toLong() * 1000))
         val cal = Calendar.getInstance()
         cal.time = dateT
-        date.text = SimpleDateFormat("dd.MM.yyyy").format((dateT)) + ", ${cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG_FORMAT, Locale.ENGLISH)}"
+        date.text = "${SimpleDateFormat("dd.MM.yyyy").format((dateT))}, ${cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG_FORMAT, Locale.ENGLISH)}"
         initWeatherIcon(model.weather!![0].icon.toString(), img)
-        Clouds.text = model.clouds!!.toString() + '%'
-        Humidity.text = model.humidity!!.toString() + '%'
-        Wind.text = model.wind_speed.toString() + "\nm/s"
+        Clouds.text = "${model.clouds!!}%"
+        Humidity.text = "${model.humidity!!}%"
+        Wind.text = "${model.wind_speed!!}\nm/s"
 
         listCity.add(ModelCity(textCity.text.toString(), lat, lon))
         rec_history.adapter!!.notifyDataSetChanged()
@@ -113,7 +119,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             lon = modelCity.lon!!
             initDataFromApiWeather()
         }else
-            hideCoord()
+            hideCoordinatesChoose()
     }
 
     private fun initWeatherIcon(icon: String, img: ImageView){
@@ -130,7 +136,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                     call: Call<ModelWeather>,
                     response: Response<ModelWeather>
                 ) {
-                    hideCoord()
+                    hideCoordinatesChoose()
                     list = response.body()!!.daily!!.toMutableList()
                     rec.apply {
                         layoutManager =
@@ -172,7 +178,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                 .build()
     }
 
-    private fun hideCoord(){
+    private fun hideCoordinatesChoose(){
         motion.requestFocus()
         hideKeyboard()
         motion.setTransition(R.id.tra_show)
@@ -180,7 +186,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         openWindow = false
     }
 
-    private fun showCoord(){
+    private fun showCoordinatesChoose(){
         motion.setTransition(R.id.tra_show)
         motion.transitionToEnd()
         openWindow = true

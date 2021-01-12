@@ -18,4 +18,5 @@
     <string name="textHumidity">Humidity</string>
     <string name="desIconWeather">Weather Icon</string>
     <integer name="swing_anim_time">750</integer>
+    <integer name="intSizeCheckBox">20</integer>
 </resources>

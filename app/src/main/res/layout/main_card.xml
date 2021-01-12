@@ -11,10 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:focusable="true"
         app:cardBackgroundColor="@color/colorAlpha"
         app:cardCornerRadius="25dp"
-        app:cardElevation="0dp"
-        android:focusable="true">
+        app:cardElevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,9 +69,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="15dp"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
-                    android:weightSum="10"
-                    android:baselineAligned="false">
+                    android:weightSum="10">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -196,5 +196,17 @@
             android:weightSum="100" />
 
     </androidx.cardview.widget.CardView>
+
+    <CheckBox
+        android:id="@+id/favoriteCheck"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:button="@drawable/favorite_checkbox_selector"
+        android:checked="false"
+        android:textIsSelectable="false" />
 
 </RelativeLayout>
