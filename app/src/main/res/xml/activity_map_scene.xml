@@ -49,9 +49,6 @@
         app:constraintSetStart="@+id/start"
         android:id="@+id/tra_show"
         app:duration="100">
-        <OnSwipe
-            app:touchAnchorId="@id/inc"
-            app:dragDirection="dragUp" />
     </Transition>
     <ConstraintSet android:id="@+id/hideStart" >
         <Constraint

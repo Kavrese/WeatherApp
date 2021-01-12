@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.content.AbstractThreadedSyncAdapter
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -32,13 +33,15 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     private var lat = "55.4507"
     private var lon = "37.3656"
     private var cityAQI: ModelAQI? = null
+    private var nowPosDaily: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showStartScreen()
 
-        favoriteCheck.setOnCheckedChangeListener { compoundButton, b ->
-
+        favoriteCheck.setOnCheckedChangeListener { _, b ->
+            list[nowPosDaily].favorite = b
+            rec.adapter!!.notifyDataSetChanged()
         }
 
         textCity.setOnClickListener {
@@ -88,7 +91,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     }
 
 
-    private fun initDateForMainCard(model: ModelDay, pos:Int){
+    private fun initDataForMainCard(model: ModelDay, pos:Int){
         var te = model.temp!!.day!!.toInt().toString() + "°"
         if ("-" !in te)
             te = "+$te"
@@ -102,24 +105,28 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         Clouds.text = "${model.clouds!!}%"
         Humidity.text = "${model.humidity!!}%"
         Wind.text = "${model.wind_speed!!}\nm/s"
-
-        listCity.add(ModelCity(textCity.text.toString(), lat, lon))
-        rec_history.adapter!!.notifyDataSetChanged()
+        favoriteCheck.isChecked = model.favorite
     }
 
     override fun clickToItemWeek(position: Int) {
-        val model = list[position]
-        initDateForMainCard(model, position)
+        nowPosDaily = position
+        val model = list[nowPosDaily]
+        initDataForMainCard(model, nowPosDaily)
+        rec.adapter!!.notifyDataSetChanged()
     }
 
     override fun clickToItemHistory(position: Int) {
         val modelCity = listCity[position]
-        if (lat != modelCity.lat!! && lon != modelCity.lon!!) {
+        if (isThisCity(modelCity)) {
             lat = modelCity.lat!!
             lon = modelCity.lon!!
             initDataFromApiWeather()
         }else
             hideCoordinatesChoose()
+    }
+
+    private fun isThisCity(model: ModelCity): Boolean{
+        return lat != model.lat!! && lon != model.lon!!
     }
 
     private fun initWeatherIcon(icon: String, img: ImageView){
@@ -138,14 +145,10 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                 ) {
                     hideCoordinatesChoose()
                     list = response.body()!!.daily!!.toMutableList()
-                    rec.apply {
-                        layoutManager =
-                            LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
-                            adapter = AdapterWeather(list, 0)
-                    }
                     textCity.text = response.body()!!.timezone!!.substringAfter('/')
-                    initDateForMainCard(response.body()!!.daily!![0], 0)
-                    rec.adapter!!.notifyDataSetChanged()
+                    initDataForMainCard(response.body()!!.daily!![0], 0)
+                    listCity.add(ModelCity(textCity.text.toString(), lat, lon))
+                    initNewAdapterWeather(rec, AdapterWeather(list, nowPosDaily))
                     initAQI()
                 }
 
@@ -154,6 +157,13 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
                         .show()
                 }
             })
+    }
+
+    private fun initNewAdapterWeather (rec: RecyclerView, newAdapter: AdapterWeather){
+        rec.apply {
+            adapter = newAdapter
+            layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
+        }
     }
 
     private fun initAQI(){

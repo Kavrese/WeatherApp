@@ -12,7 +12,9 @@ class ModelDay (
     var clouds: Int? = null,
     var feels_like: FeelsLikeTemps? = null,
     var humidity: Int? = null,
-    var weather: List<Weather>? = null
+    var weather: List<Weather>? = null,
+    var favorite: Boolean = false
+
 )
 
 class Weather(
