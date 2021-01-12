@@ -5,7 +5,8 @@
     android:layout_height="210dp"
     android:clickable="true"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true">
 
     <androidx.cardview.widget.CardView
         android:layout_width="150dp"
@@ -19,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/black"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical" />
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
@@ -36,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="Coordinates City"
+            android:text="@string/textCoordinatesCity"
             android:textColor="@color/white"
             android:textSize="22sp" />
 
@@ -53,30 +54,32 @@
                 android:id="@+id/textLat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:layout_weight="5"
                 android:background="@color/black"
                 android:gravity="center"
-                android:hint="55.4507"
+                android:hint="@string/hintLat"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/colorSecondText"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:inputType="number" />
 
             <EditText
                 android:id="@+id/textLon"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="5"
                 android:background="@color/black"
                 android:gravity="center"
-                android:hint="37.3656"
+                android:hint="@string/hintLon"
                 android:imeOptions="actionGo"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textColorHint="@color/colorSecondText"
-                android:textSize="22sp" />
+                android:textSize="22sp"
+                android:inputType="number" />
 
         </LinearLayout>
 

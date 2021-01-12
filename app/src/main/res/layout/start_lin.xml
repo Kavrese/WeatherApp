@@ -6,7 +6,8 @@
     android:clickable="true"
     android:weightSum="10"
     android:layout_height="match_parent"
-    android:background="@color/backMainView">
+    android:background="@color/backMainView"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/imageIcon"
@@ -16,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon" />
+        app:srcCompat="@drawable/icon"
+        android:contentDescription="@string/desIconWeather" />
 
     <TextView
         android:id="@+id/textView2"
@@ -26,7 +28,7 @@
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:shadowColor="@color/white"
-        android:text="@string/LoadingText"
+        android:text="@string/LoadingTextProcess"
         android:textColor="@color/white"
         android:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"

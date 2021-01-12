@@ -1,6 +1,21 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="title_activity_maps">Map</string>
-    <string name="LoadingText">Loading...</string>
+    <string name="LoadingTextProcess">Loading...</string>
+    <string name="textCity">City</string>
+    <string name="textForThisWeek">For this week</string>
+    <string name="textDate">Wednesday, 10 Feb</string>
+    <string name="textEco">000</string>
+    <string name="textMoving">Moving</string>
+    <string name="textCoordinatesCity">Coordinates City</string>
+    <string name="hintLat">55.4507</string>
+    <string name="hintLon">37.3656</string>
+    <string name="textT">0°</string>
+    <string name="textClouds">Clouds</string>
+    <string name="textZeroPercent">0%</string>
+    <string name="textWind">Wind</string>
+    <string name="textZeroMetricSpeed">0m/s</string>
+    <string name="textHumidity">Humidity</string>
+    <string name="desIconWeather">Weather Icon</string>
     <integer name="swing_anim_time">750</integer>
 </resources>

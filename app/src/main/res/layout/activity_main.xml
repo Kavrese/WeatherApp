@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
@@ -41,8 +41,8 @@
                     android:id="@+id/textCity"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:gravity="left|center"
-                    android:text="City"
+                    android:gravity="start|center"
+                    android:text="@string/textCity"
                     android:textColor="@color/colorMainText"
                     android:textSize="25sp"
                     app:autoSizeTextType="uniform" />
@@ -52,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Wednesday, 10 Feb"
+                    android:text="@string/textDate"
                     android:textColor="@color/colorSecondText"
                     android:textSize="18sp" />
             </LinearLayout>
@@ -64,6 +64,7 @@
                 app:cardBackgroundColor="@color/colorAlpha"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -78,11 +79,12 @@
                         android:id="@+id/textAQI"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:drawableLeft="@drawable/eco"
+                        android:drawablePadding="5dp"
                         android:gravity="center"
-                        android:text="000"
+                        android:text="@string/textEco"
                         android:textColor="@color/white"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        app:drawableLeftCompat="@drawable/eco" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -102,7 +104,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
-            android:text="For this week"
+            android:text="@string/textForThisWeek"
             android:textColor="@color/colorAccentText"
             android:textSize="22sp"
             app:autoSizeTextType="none" />
