@@ -6,8 +6,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,10 +59,17 @@ class AdapterWeather(private val list: MutableList<ModelDay>, var nowPos: Int): 
             val activity = holder.itemView.context as MainActivity
             activity.clickToItemWeek(position)
             nowPos = position
-            holder.back.background = holder.itemView.context.resources.getDrawable(R.drawable.shape_gr)
             notifyDataSetChanged()
         }
     }
 
     override fun getItemCount(): Int = list.size
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

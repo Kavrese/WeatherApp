@@ -1,6 +1,5 @@
 package com.example.weatherapp
 
-import android.content.AbstractThreadedSyncAdapter
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -33,15 +32,15 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     private var lat = "55.4507"
     private var lon = "37.3656"
     private var cityAQI: ModelAQI? = null
-    private var nowPosDaily: Int = 0
+    private var nowPos = 0
+    private var adapterPos = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         showStartScreen()
 
-        favoriteCheck.setOnCheckedChangeListener { _, b ->
-            list[nowPosDaily].favorite = b
-            rec.adapter!!.notifyDataSetChanged()
+        favoriteCheck.setOnCheckedChangeListener { compoundButton, b ->
+            list[nowPos].favorite = b
         }
 
         textCity.setOnClickListener {
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         }
 
         initDataFromApiWeather()
-        }
+    }
 
     private fun initNewCity(){
         if (textLat.text.toString() != lat && textLon.text.toString() != lon) {
@@ -106,18 +105,19 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
         Humidity.text = "${model.humidity!!}%"
         Wind.text = "${model.wind_speed!!}\nm/s"
         favoriteCheck.isChecked = model.favorite
+        listCity.add(ModelCity(textCity.text.toString(), lat, lon))
+        rec_history.adapter!!.notifyDataSetChanged()
     }
 
     override fun clickToItemWeek(position: Int) {
-        nowPosDaily = position
-        val model = list[nowPosDaily]
-        initDataForMainCard(model, nowPosDaily)
-        rec.adapter!!.notifyDataSetChanged()
+        val model = list[position]
+        nowPos = position
+        initDataForMainCard(model, position)
     }
 
     override fun clickToItemHistory(position: Int) {
         val modelCity = listCity[position]
-        if (isThisCity(modelCity)) {
+        if (nowThisCity(modelCity)) {
             lat = modelCity.lat!!
             lon = modelCity.lon!!
             initDataFromApiWeather()
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
             hideCoordinatesChoose()
     }
 
-    private fun isThisCity(model: ModelCity): Boolean{
+    private fun nowThisCity(model: ModelCity): Boolean{
         return lat != model.lat!! && lon != model.lon!!
     }
 
@@ -138,32 +138,29 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
     private fun initDataFromApiWeather(){
         showStartScreen()
         initRetrofit("https://api.openweathermap.org/data/2.5/").create(OpenWeatherMapInterface::class.java)
-            .getDaileData(lat, lon).enqueue(object : Callback<ModelWeather> {
-                override fun onResponse(
-                    call: Call<ModelWeather>,
-                    response: Response<ModelWeather>
-                ) {
-                    hideCoordinatesChoose()
-                    list = response.body()!!.daily!!.toMutableList()
-                    textCity.text = response.body()!!.timezone!!.substringAfter('/')
-                    initDataForMainCard(response.body()!!.daily!![0], 0)
-                    listCity.add(ModelCity(textCity.text.toString(), lat, lon))
-                    initNewAdapterWeather(rec, AdapterWeather(list, nowPosDaily))
-                    initAQI()
-                }
+                .getDaileData(lat, lon).enqueue(object : Callback<ModelWeather> {
+                    override fun onResponse(
+                            call: Call<ModelWeather>,
+                            response: Response<ModelWeather>
+                    ) {
+                        hideCoordinatesChoose()
+                        list = response.body()!!.daily!!.toMutableList()
+                        rec.apply {
+                            layoutManager =
+                                    LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
+                            adapter = AdapterWeather(list, adapterPos)
+                        }
+                        textCity.text = response.body()!!.timezone!!.substringAfter('/')
+                        initDataForMainCard(response.body()!!.daily!![0], 0)
+                        rec.adapter!!.notifyDataSetChanged()
+                        initAQI()
+                    }
 
-                override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG)
-                        .show()
-                }
-            })
-    }
-
-    private fun initNewAdapterWeather (rec: RecyclerView, newAdapter: AdapterWeather){
-        rec.apply {
-            adapter = newAdapter
-            layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.HORIZONTAL, false)
-        }
+                    override fun onFailure(call: Call<ModelWeather>, t: Throwable) {
+                        Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG)
+                                .show()
+                    }
+                })
     }
 
     private fun initAQI(){
@@ -216,7 +213,7 @@ class MainActivity : AppCompatActivity(), ClickFromOtherOBJ {
 
     private fun hideKeyboard() {
         val imm: InputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(window.decorView.windowToken, 0)
     }
 }
